@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://andyxzq.github.io/2017/11/26/广告ctr预估中的FM和FFM模型/index.html">
 <meta property="og:site_name" content="好奇小青年的博客">
 <meta property="og:description" content="1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近年来">
-<meta property="og:updated_time" content="2017-11-26T10:56:41.000Z">
+<meta property="og:updated_time" content="2017-11-26T11:16:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="广告ctr预估中的FM和FFM模型">
 <meta name="twitter:description" content="1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近年来">
@@ -208,9 +208,12 @@
 </li>
 </ul>
 <h2 id="4-其他杂项"><a href="#4-其他杂项" class="headerlink" title="4. 其他杂项"></a>4. 其他杂项</h2><p>针对展示广告中的点击率或转化率预估模型，通常需要求解如下无约束优化问题：</p>
-<script type="math/tex; mode=display">min_{w} \frac{\lambda}{2}||w||_{2}^{2}+\sum\limits_{i=1}^{m}log(1+exp(-y_{i}\phi(w, x_{i})))</script><pre><code>这里的特征一般含用户侧(性别、年龄、教育背景、收入、偏好等)、广告侧(创意、素材、标题等)、上下文(时间、位置等)等特征，实际使用时需要针对模型的特性做不同的特征工程。
-优化算法一般有一阶优化方法SGD(Stochastic Gradient Descent)、二阶拟牛顿优化方法L-BFGS(Limited memory Broyden–Fletcher–Goldfarb–Shanno)、Trust-Region。这里就暂时不展开讲述，留在后续文章中介绍。
-</code></pre><h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p>[1] <a href="https://tech.meituan.com/deep-understanding-of-ffm-principles-and-practices.html" target="_blank" rel="noopener">深入FFM原理与实践-美团点评技术博客</a><br>[2] <a href="http://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf" target="_blank" rel="noopener">Factorization Machines-steffen randle</a><br>[3] <a href="https://www.andrew.cmu.edu/user/yongzhua/conferences/ffm.pdf" target="_blank" rel="noopener">Field-aware Factorization Machines for CTR Prediction</a><br>[4] <a href="https://www.kaggle.com/c/criteo-display-ad-challenge" target="_blank" rel="noopener">kaggle: Display Advertising Challenge</a></p>
+<script type="math/tex; mode=display">
+min_{w} \frac{\lambda}{2}||w||_{2}^{2}+\sum\limits_{i=1}^{m}log(1+exp(-y_{i}\phi(w, x_{i})))</script><ul>
+<li>这里的特征一般含用户侧(性别、年龄、教育背景、收入、偏好等)、广告侧(创意、素材、标题等)、上下文(时间、位置等)等特征，实际使用时需要针对模型的特性做不同的特征工程。</li>
+<li>优化算法一般有一阶优化方法SGD(Stochastic Gradient Descent)、二阶拟牛顿优化方法L-BFGS(Limited memory Broyden–Fletcher–Goldfarb–Shanno)、Trust-Region。这里就暂时不展开讲述，留在后续文章中介绍。</li>
+</ul>
+<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p>[1] <a href="https://tech.meituan.com/deep-understanding-of-ffm-principles-and-practices.html" target="_blank" rel="noopener">深入FFM原理与实践-美团点评技术博客</a><br>[2] <a href="http://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf" target="_blank" rel="noopener">Factorization Machines-steffen randle</a><br>[3] <a href="https://www.andrew.cmu.edu/user/yongzhua/conferences/ffm.pdf" target="_blank" rel="noopener">Field-aware Factorization Machines for CTR Prediction</a><br>[4] <a href="https://www.kaggle.com/c/criteo-display-ad-challenge" target="_blank" rel="noopener">kaggle: Display Advertising Challenge</a></p>
 
       
 
@@ -319,6 +322,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2017/11/26/爬虫框架Scrapy学习笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          爬虫框架Scrapy学习笔记
+        
+      </div>
+    </a>
   
   
     <a href="/2017/11/26/Reinforcement-Learning-学习笔记/" id="article-nav-older" class="article-nav-link-wrap">
@@ -474,6 +486,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">机器学习、互联网广告</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
               </li>
             
             <div class="clearfix"></div>
