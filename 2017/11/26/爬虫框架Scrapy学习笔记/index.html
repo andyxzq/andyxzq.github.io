@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="好奇小青年的博客">
 <meta property="og:description" content="1. Scrapy框架简介 Scrapy是一个python编写的、快速、强大的爬虫框架。有如下特点： 1. 基于Twisted的异步、非阻塞的网络请求，不用等待上一个网络请求结束才开始下一个请求。2. 基于Xpath和CSS从HTML和XML数据源中提取数据。3. 支持将数据导出为Json/CSV/XML格式。4. 交互式命令行工具创建爬虫、开始爬取、分析爬取数据、调试、部署爬虫。    2. s">
 <meta property="og:image" content="http://andyxzq.github.io/2017/11/26/爬虫框架Scrapy学习笔记/scrapy_architecture.png">
-<meta property="og:updated_time" content="2017-11-26T11:24:10.000Z">
+<meta property="og:updated_time" content="2017-11-26T11:29:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="爬虫框架Scrapy学习笔记">
 <meta name="twitter:description" content="1. Scrapy框架简介 Scrapy是一个python编写的、快速、强大的爬虫框架。有如下特点： 1. 基于Twisted的异步、非阻塞的网络请求，不用等待上一个网络请求结束才开始下一个请求。2. 基于Xpath和CSS从HTML和XML数据源中提取数据。3. 支持将数据导出为Json/CSV/XML格式。4. 交互式命令行工具创建爬虫、开始爬取、分析爬取数据、调试、部署爬虫。    2. s">
@@ -252,14 +252,16 @@
 <li>extrack_links()</li>
 </ul>
 </li>
-<li>scrapy.crawler.CrawlerProcess: 同一个进程内运行多个爬虫类<ul>
+<li>scrapy.crawler.CrawlerProcess: 同一个进程内运行多个爬虫类</li>
 <li>scrapy.crawler.CrawlerRunner: 跟踪、管理、运行多个爬虫的工具类</li>
-<li>scrapy.downloadermiddlewares.DownloaderMiddleware: 位于Engine类和Downloader类之间，处理request和response，需要在settings.py中配置DOWNLOADER_MIDDLEWARES项，包含如下内置的子类：</li>
+<li>scrapy.downloadermiddlewares.DownloaderMiddleware: 位于Engine类和Downloader类之间，处理request和response，需要在settings.py中配置DOWNLOADER_MIDDLEWARES项，包含如下内置的子类：<ul>
 <li>CookiesMiddleware</li>
 <li>DownloadTimeoutMiddleware</li>
 <li>HttpCompressionMiddleware</li>
 <li>RobotsTxtMiddleware</li>
-<li>scrapy.spidermiddlewares.SpiderMiddleware: 位于Engine类和Spider类之间，需要在settings.py中配置SPIDER_MIDDLEWARES项，包含如下内置的子类：</li>
+</ul>
+</li>
+<li>scrapy.spidermiddlewares.SpiderMiddleware: 位于Engine类和Spider类之间，需要在settings.py中配置SPIDER_MIDDLEWARES项，包含如下内置的子类：<ul>
 <li>DepthMiddleware</li>
 <li>HttpErrorMiddleware</li>
 </ul>

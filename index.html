@@ -251,14 +251,16 @@
 <li>extrack_links()</li>
 </ul>
 </li>
-<li>scrapy.crawler.CrawlerProcess: 同一个进程内运行多个爬虫类<ul>
+<li>scrapy.crawler.CrawlerProcess: 同一个进程内运行多个爬虫类</li>
 <li>scrapy.crawler.CrawlerRunner: 跟踪、管理、运行多个爬虫的工具类</li>
-<li>scrapy.downloadermiddlewares.DownloaderMiddleware: 位于Engine类和Downloader类之间，处理request和response，需要在settings.py中配置DOWNLOADER_MIDDLEWARES项，包含如下内置的子类：</li>
+<li>scrapy.downloadermiddlewares.DownloaderMiddleware: 位于Engine类和Downloader类之间，处理request和response，需要在settings.py中配置DOWNLOADER_MIDDLEWARES项，包含如下内置的子类：<ul>
 <li>CookiesMiddleware</li>
 <li>DownloadTimeoutMiddleware</li>
 <li>HttpCompressionMiddleware</li>
 <li>RobotsTxtMiddleware</li>
-<li>scrapy.spidermiddlewares.SpiderMiddleware: 位于Engine类和Spider类之间，需要在settings.py中配置SPIDER_MIDDLEWARES项，包含如下内置的子类：</li>
+</ul>
+</li>
+<li>scrapy.spidermiddlewares.SpiderMiddleware: 位于Engine类和Spider类之间，需要在settings.py中配置SPIDER_MIDDLEWARES项，包含如下内置的子类：<ul>
 <li>DepthMiddleware</li>
 <li>HttpErrorMiddleware</li>
 </ul>
