@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://andyxzq.github.io">
   <title>广告ctr预估中的FM和FFM模型 | 好奇小青年的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征">
+  <meta name="description" content="1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程">
 <meta name="keywords" content="机器学习、互联网广告">
 <meta property="og:type" content="article">
 <meta property="og:title" content="广告ctr预估中的FM和FFM模型">
 <meta property="og:url" content="http://andyxzq.github.io/2017/11/26/广告ctr预估中的FM和FFM模型/index.html">
 <meta property="og:site_name" content="好奇小青年的博客">
-<meta property="og:description" content="##1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近">
-<meta property="og:updated_time" content="2017-11-26T10:14:02.000Z">
+<meta property="og:description" content="1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近年来">
+<meta property="og:updated_time" content="2017-11-26T10:56:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="广告ctr预估中的FM和FFM模型">
-<meta name="twitter:description" content="##1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近">
+<meta name="twitter:description" content="1. 在线广告广告ctr预估 点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近年来">
   
     <link rel="alternative" href="/atom.xml" title="好奇小青年的博客" type="application/atom+xml">
   
@@ -174,28 +174,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##1. 在线广告广告ctr预估</p>
-<pre><code>点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近年来出现了以GBDT(Gradient Boosting Decision Tree)、FM(actorization Machine)及其改进FFM(Field-aware Factorization Machine)为代表的非线性模型，在一些CTR预估竞赛中表现出优异的效果。本文将对FM和FFM进行简短概要的介绍。
-</code></pre><p>##2. FM模型</p>
-<blockquote>
+        <h2 id="1-在线广告广告ctr预估"><a href="#1-在线广告广告ctr预估" class="headerlink" title="1. 在线广告广告ctr预估"></a>1. 在线广告广告ctr预估</h2><blockquote>
+<p>点击率(click-through rate)和转化率(conversion rate)是衡量广告流量的两个重要指标。点击率与点击价值的乘积决定了广告的排列顺序。在大规模广告系统中，常用的ctr预估模型是LR(Logistic Regression)，LR易于并行化，配合大量的人工特征工程，可以产生很好的效果。但LR本质上是一种广义线性模型，分类能力有限。因此，近年来出现了以GBDT(Gradient Boosting Decision Tree)、FM(actorization Machine)及其改进FFM(Field-aware Factorization Machine)为代表的非线性模型，在一些CTR预估竞赛中表现出优异的效果。本文将对FM和FFM进行简短概要的介绍。</p>
+</blockquote>
+<h2 id="2-FM模型"><a href="#2-FM模型" class="headerlink" title="2. FM模型"></a>2. FM模型</h2><blockquote>
 <p><strong>FM(Factorization Machine)由Steffen Randle于2010年提出，起初是用于推荐系统中稀疏数据场景下的评分预测问题。</strong>它属于一种在多项式模型上衍生出来的模型。</p>
 </blockquote>
 <ul>
-<li>二阶FM的预测公式：<br>$$<br>\phi<em>{FM}(w, x) = w</em>{0}+\sum\limits<em>{i=1}^{n}w</em>{i}x<em>{i}+\sum\limits</em>{i=1}^{n-1}\sum\limits<em>{j=i+1}^{n}w</em>{ij}x<em>{i}x</em>{j}<br>= w<em>{0}+\sum\limits</em>{i=1}^{n}w<em>{i}x</em>{i}+\sum\limits<em>{i=1}^{n-1}\sum\limits</em>{j=i+1}^{n}(v<em>{i}^{T}v</em>{j})x<em>{i}x</em>{j}<br>$$<br>注意这里直接计算$\phi<em>{FM}(w, x)$的时间复杂度是$O(kn^{2})$。经过变换二次项，时间复杂度可降为$O(kn)$。即：<br>$$\sum\limits</em>{i=1}^{n}\sum\limits<em>{j=i+1}^{n}&lt;v</em>{i}, v<em>{j}&gt;x</em>{i}x<em>{j}=\frac{1}{2}\sum\limits</em>{f=1}^{k}((\sum\limits<em>{i=1}^{n}v</em>{i,f}x<em>{i})^{2}-\sum\limits</em>{i=1}^{n}v<em>{i,f}^{2}x</em>{i}^{2})$$<br>FM通过将特征变量交叉项的系数分解到隐变量空间中，可以更好的在稀疏数据中估计二次项的参数。FM模型以其通用的表达形式可以直接适用于回归、分类和排序任务。</li>
-<li>模型学习<br>针对FM模型，可以直接使用SGD进行模型参数更新，公式如下：<br>\begin{equation}<br>\frac{\partial \phi<em>{FM}(w, x)}{\partial w}=<br>\left{<br>\begin{aligned}<br>1,  \theta = w</em>{0} \<br>x<em>{i}, \theta = w</em>{i} \<br>x<em>{i}\sum\limits</em>{j=1}^{n}v<em>{j,f}x</em>{j}-v<em>{i,f}x</em>{i}^{2}, \theta = v_{i,f}<br>\end{aligned}<br>\right.<br>\end{equation}</li>
+<li>二阶FM的预测公式：<script type="math/tex; mode=display">
+\phi_{FM}(w, x) = w_{0}+\sum\limits_{i=1}^{n}w_{i}x_{i}+\sum\limits_{i=1}^{n-1}\sum\limits_{j=i+1}^{n}w_{ij}x_{i}x_{j}
+= w_{0}+\sum\limits_{i=1}^{n}w_{i}x_{i}+\sum\limits_{i=1}^{n-1}\sum\limits_{j=i+1}^{n}(v_{i}^{T}v_{j})x_{i}x_{j}</script>注意这里直接计算$\phi_{FM}(w, x)$的时间复杂度是$O(kn^{2})$。经过变换二次项，时间复杂度可降为$O(kn)$。即：<script type="math/tex; mode=display">\sum\limits_{i=1}^{n}\sum\limits_{j=i+1}^{n}<v_{i}, v_{j}>x_{i}x_{j}=\frac{1}{2}\sum\limits_{f=1}^{k}((\sum\limits_{i=1}^{n}v_{i,f}x_{i})^{2}-\sum\limits_{i=1}^{n}v_{i,f}^{2}x_{i}^{2})</script>FM通过将特征变量交叉项的系数分解到隐变量空间中，可以更好的在稀疏数据中估计二次项的参数。FM模型以其通用的表达形式可以直接适用于回归、分类和排序任务。</li>
+<li>模型学习<br>针对FM模型，可以直接使用SGD进行模型参数更新，公式如下：<br>\begin{equation}<br>\frac{\partial \phi_{FM}(w, x)}{\partial w}=<br>\left\{<br>\begin{aligned}<br>1,  \theta = w_{0} \\<br>x_{i}, \theta = w_{i} \\<br>x_{i}\sum\limits_{j=1}^{n}v_{j,f}x_{j}-v_{i,f}x_{i}^{2}, \theta = v_{i,f}<br>\end{aligned}<br>\right.<br>\end{equation}</li>
 </ul>
-<p>##3. FM模型的改进: FFM模型</p>
-<blockquote>
+<h2 id="3-FM模型的改进-FFM模型"><a href="#3-FM模型的改进-FFM模型" class="headerlink" title="3. FM模型的改进: FFM模型"></a>3. FM模型的改进: FFM模型</h2><blockquote>
 <p><strong>FFM(Field-aware Factorization Machine)由Yuchin Juan等在2014年参加kaggle criteo展示广告点击率预测比赛时提出。在FM模型基础之上引入了特征域的概念。</strong></p>
 </blockquote>
 <ul>
-<li>预测公式：<br>$$<br>\phi<em>{FFM}(w, x) = w</em>{0}+\sum\limits<em>{i=1}^{n}w</em>{i}x<em>{i}+\sum\limits</em>{i=1}^{n-1}\sum\limits<em>{j=i+1}^{n}(v</em>{i,f<em>{1}} \cdot v</em>{j,f<em>{2}})x</em>{i}x<em>{j}<br>$$<br>这里，$f</em>{1}, f<em>{2}$是特征$x</em>{i}$和$x<em>{j}$所属的域，每一个特征所属的域是唯一的，$x</em>{i}$和$x_{j}$被分解到了对应域的隐空间中。二次项的总共有$\frac{n(n-1)}{2}$个。</li>
+<li>预测公式：<script type="math/tex; mode=display">
+\phi_{FFM}(w, x) = w_{0}+\sum\limits_{i=1}^{n}w_{i}x_{i}+\sum\limits_{i=1}^{n-1}\sum\limits_{j=i+1}^{n}(v_{i,f_{1}} \cdot v_{j,f_{2}})x_{i}x_{j}</script>这里，$f_{1}, f_{2}$是特征$x_{i}$和$x_{j}$所属的域，每一个特征所属的域是唯一的，$x_{i}$和$x_{j}$被分解到了对应域的隐空间中。二次项的总共有$\frac{n(n-1)}{2}$个。</li>
 <li><p>模型学习：</p>
 <ol>
-<li>计算子梯度<br>$g<em>{i, f</em>{1}} = \triangledown<em>{w</em>{i,f<em>{1}}}f(w)=\lambda w</em>{i,f<em>{1}} + \kappa w</em>{j, f<em>{2}}$<br>$g</em>{j, f<em>{2}} = \triangledown</em>{w<em>{j, f</em>{2}}}f(w) = \lambda w<em>{j,f</em>{2}} + \kappa w<em>{i, f</em>{1}}$<br>这里，$\kappa = \frac{-y}{1+exp(y\phi_{FFM}(w,x))}$</li>
-<li>计算总梯度<br>$(G<em>{i, f</em>{1}})<em>{d} = (G</em>{i, f<em>{1}})</em>{d} + (g<em>{i, f</em>{1}})<em>{d}^{2}$<br>$(G</em>{j, f<em>{2}})</em>{d} = (G<em>{j, f</em>{2}})<em>{d} + (g</em>{j, f<em>{2}})</em>{d}^{2}$</li>
-<li><p>参数更新<br>$(w<em>{i, f</em>{1}})<em>{d} = (w</em>{i, f<em>{1}})</em>{d} - \frac{\eta}{\sqrt{(G<em>{i, f</em>{1}})<em>{d}}}(g</em>{i,f<em>{1}})</em>{d}$<br>$(w<em>{j, f</em>{2}})<em>{d} = (w</em>{j, f<em>{2}})</em>{d} - \frac{\eta}{\sqrt{(G<em>{j, f</em>{2}})<em>{d}}}(g</em>{j,f<em>{2}})</em>{d}$</p>
-<p>   这里，参数更新时，参考了Adagrad算法的自适应学习率方法。FFM模型整体的训练时间复杂度是$O(kn^{2})$，相比FM更高。FFM在实际使用时容易过拟合，需要使用Early Stopping策略。并且需要将原始数据转换成”field_id:feature_id:value”的格式。实际使用时，数值型特征分配单独的field编号，类别特征ohe后的所有特征属于同一个域。</p>
+<li>计算子梯度<br>$g_{i, f_{1}} = \triangledown_{w_{i,f_{1}}}f(w)=\lambda w_{i,f_{1}} + \kappa w_{j, f_{2}}$<br>$g_{j, f_{2}} = \triangledown_{w_{j, f_{2}}}f(w) = \lambda w_{j,f_{2}} + \kappa w_{i, f_{1}}$<br>这里，$\kappa = \frac{-y}{1+exp(y\phi_{FFM}(w,x))}$</li>
+<li>计算总梯度<br>$(G_{i, f_{1}})_{d} = (G_{i, f_{1}})_{d} + (g_{i, f_{1}})_{d}^{2}$<br>$(G_{j, f_{2}})_{d} = (G_{j, f_{2}})_{d} + (g_{j, f_{2}})_{d}^{2}$</li>
+<li><p>参数更新<br>$(w_{i, f_{1}})_{d} = (w_{i, f_{1}})_{d} - \frac{\eta}{\sqrt{(G_{i, f_{1}})_{d}}}(g_{i,f_{1}})_{d}$<br>$(w_{j, f_{2}})_{d} = (w_{j, f_{2}})_{d} - \frac{\eta}{\sqrt{(G_{j, f_{2}})_{d}}}(g_{j,f_{2}})_{d}$</p>
+<p>这里，参数更新时，参考了Adagrad算法的自适应学习率方法。FFM模型整体的训练时间复杂度是$O(kn^{2})$，相比FM更高。FFM在实际使用时容易过拟合，需要使用Early Stopping策略。并且需要将原始数据转换成”field_id:feature_id:value”的格式。实际使用时，数值型特征分配单独的field编号，类别特征ohe后的所有特征属于同一个域。</p>
 </li>
 </ol>
 </li>
@@ -205,8 +207,10 @@
 </ul>
 </li>
 </ul>
-<p>##4. 其他杂项<br>针对展示广告中的点击率或转化率预估模型，通常需要求解如下无约束优化问题：<br>$$min<em>{w} \frac{\lambda}{2}||w||</em>{2}^{2}+\sum\limits<em>{i=1}^{m}log(1+exp(-y</em>{i}\phi(w, x_{i})))$$<br>    这里的特征一般含用户侧(性别、年龄、教育背景、收入、偏好等)、广告侧(创意、素材、标题等)、上下文(时间、位置等)等特征，实际使用时需要针对模型的特性做不同的特征工程。<br>    优化算法一般有一阶优化方法SGD(Stochastic Gradient Descent)、二阶拟牛顿优化方法L-BFGS(Limited memory Broyden–Fletcher–Goldfarb–Shanno)、Trust-Region。这里就暂时不展开讲述，留在后续文章中介绍。</p>
-<p>##5. 参考资料<br>[1] <a href="https://tech.meituan.com/deep-understanding-of-ffm-principles-and-practices.html" target="_blank" rel="noopener">深入FFM原理与实践-美团点评技术博客</a><br>[2] <a href="http://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf" target="_blank" rel="noopener">Factorization Machines-steffen randle</a><br>[3] <a href="https://www.andrew.cmu.edu/user/yongzhua/conferences/ffm.pdf" target="_blank" rel="noopener">Field-aware Factorization Machines for CTR Prediction</a><br>[4] <a href="https://www.kaggle.com/c/criteo-display-ad-challenge" target="_blank" rel="noopener">kaggle: Display Advertising Challenge</a></p>
+<h2 id="4-其他杂项"><a href="#4-其他杂项" class="headerlink" title="4. 其他杂项"></a>4. 其他杂项</h2><p>针对展示广告中的点击率或转化率预估模型，通常需要求解如下无约束优化问题：</p>
+<script type="math/tex; mode=display">min_{w} \frac{\lambda}{2}||w||_{2}^{2}+\sum\limits_{i=1}^{m}log(1+exp(-y_{i}\phi(w, x_{i})))</script><pre><code>这里的特征一般含用户侧(性别、年龄、教育背景、收入、偏好等)、广告侧(创意、素材、标题等)、上下文(时间、位置等)等特征，实际使用时需要针对模型的特性做不同的特征工程。
+优化算法一般有一阶优化方法SGD(Stochastic Gradient Descent)、二阶拟牛顿优化方法L-BFGS(Limited memory Broyden–Fletcher–Goldfarb–Shanno)、Trust-Region。这里就暂时不展开讲述，留在后续文章中介绍。
+</code></pre><h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p>[1] <a href="https://tech.meituan.com/deep-understanding-of-ffm-principles-and-practices.html" target="_blank" rel="noopener">深入FFM原理与实践-美团点评技术博客</a><br>[2] <a href="http://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf" target="_blank" rel="noopener">Factorization Machines-steffen randle</a><br>[3] <a href="https://www.andrew.cmu.edu/user/yongzhua/conferences/ffm.pdf" target="_blank" rel="noopener">Field-aware Factorization Machines for CTR Prediction</a><br>[4] <a href="https://www.kaggle.com/c/criteo-display-ad-challenge" target="_blank" rel="noopener">kaggle: Display Advertising Challenge</a></p>
 
       
 
@@ -372,7 +376,7 @@
     </div>
     <script>
 	var yiliaConfig = {
-		mathjax: true,
+		mathjax: [object Object],
 		isHome: false,
 		isPost: true,
 		isArchive: false,
