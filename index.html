@@ -151,6 +151,117 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Contextual-Multi-armed-Bandit算法学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/">Contextual Multi-armed Bandit算法学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/" class="archive-article-date">
+  	<time datetime="2018-01-02T12:48:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-multi-armed-bandit问题定义"><a href="#1-multi-armed-bandit问题定义" class="headerlink" title="1. multi-armed bandit问题定义"></a>1. multi-armed bandit问题定义</h2><p><img src="/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/multi-arm-bandit.jpg" alt="multi-arm-bandit"></p>
+<ul>
+<li><p>多臂老虎机问题的定义如下：</p>
+<blockquote>
+<ol>
+<li>一排K个老虎机$a_i\{i=1,2,…,K\}$；</li>
+<li>每个老虎机对应有回报$r_i\{i=1,2,…,K\}$，事先并不知道；</li>
+<li>在每一个时间t拉动一个老虎机会产生一个回报$r_{t}$；</li>
+<li>目标：根据特定的策略选择$a$，从而最小化累计遗憾值$L_{T}=E[\sum \limits_{\tau=1}^{T}r^{\star}-r_{\tau}]$。这里的$r^{\star}$是最优策略产生的回报。这里的最小化累积遗憾值相当于最大化累积回报值。</li>
+<li>这里就会产生一个强化学习中经典的exploration&amp;exploitation问题，即每次贪婪地选择当前最优回报值的臂，还是探索潜在的新臂以期获得更高价值。</li>
+<li>常见场景：推荐系统中的冷启动问题、广告系统中的广告选择、金融衍生品设计</li>
+</ol>
+</blockquote>
+</li>
+<li><p>针对这里的策略选择方法，Richar Sutton在《Reinforcement Learning: An Introduction》一书中提到了如下contextual free的方案:</p>
+<ul>
+<li>$\epsilon-greedy$: 每一次以概率$\epsilon$选择当前最优策略，以概率$1-\epsilon$选择其他策略。这里的$\epsilon$可以灵活的控制模型的偏好程度。但这样做没有利用到探索各个臂时获得的信息，仍然不做区分的exploration效果不佳。</li>
+<li>UCB(Upper Confidence Bound): 采取一种乐观的态度，根据每个臂的预期回报的不确定性的上界来选择。对于每个臂尝试的次数越多，预期回报的置信区间越窄；某个臂的尝试次数越少，置信区间越宽。对于某个臂$a_{i}$，其期望回报上界为$\bar{x}_{i}=\sqrt{\frac{2lnn}{n_{i}}}$，$\bar{x}_{i}$为臂$i$的平均回报，$n_{i}$为臂$i$的选择次数，$n$为总的选择次数。UCB不需任何参数，需要遍历所有的臂，比较耗时；并且在刚开始各个臂选择次数比较少时，结果波动比较大。</li>
+<li>Thompson Smapling: 采用贝叶斯思想，每个臂有一个beta(win, lose)分布来估计产生回报的概率；不断试验，每次选一个臂，有回报则win增加1，否则lose增加1，不断调整beta分布的参数。每次选择臂时，每个分布随机产生一个数b，然后根据最大的b选择相应的臂。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-contextual-multi-armed-bandit"><a href="#2-contextual-multi-armed-bandit" class="headerlink" title="2. contextual multi-armed bandit"></a>2. contextual multi-armed bandit</h2><blockquote>
+<p><strong>每个arm包含特定的随时间而变化的上下文特征$x_{t}$，并且其回报$r_{t}$和上下文特征$x_{t}$直接相关，即存在一个函数$f$，使得$r_{t}=f(x_{t})$。这里的$x_{t}$即为实际应用中抽象出的辅助选择每个arm的特征，针对不同的互联网推荐系统场景，可产生不同的用户和物品的特征。</strong>针对不同的有关函数$f$的假设，会得到不同的模型，下面的LinUCB就是其中的典型一类。</p>
+</blockquote>
+<h3 id="2-1-LinUCB-Linear-Upper-Confidence-Bound"><a href="#2-1-LinUCB-Linear-Upper-Confidence-Bound" class="headerlink" title="2.1 LinUCB(Linear Upper Confidence Bound)"></a>2.1 LinUCB(Linear Upper Confidence Bound)</h3><blockquote>
+<p>LinUCB由前雅虎的研究员Lihong Li(现就任微软)等在2010年提出，被应用到雅虎首页的个性化新闻推荐中。<strong>这里假设每个臂的预期回报$r_{t,a}$和上下文$x_{t}$之间存在线性关系, 即$E[r_{t,a}|x_{t,a}]=x_{t,a}^{t}\theta_{a}$.</strong></p>
+</blockquote>
+<p>考虑在新闻推荐的场景中，回报$r_{t,a}$可以简单的看成是否点击(0/1)，arm即为需要推荐的新闻。此时，可以给出一个对模型参数$\theta_{a}$的如下岭回归估计：<script type="math/tex">\hat{\theta_{a}}=(D_{a}^{T}D_{a}+I_{d})^{-1}D_{a}^{T}c_{a}</script><br>这里的$D_{a}$是m个维度为d的训练样本构成的矩阵，$c_{a}$是标签向量。<br>此外，这里有$|x_{t,a}^{T}\hat{\theta_{a}}-E[r_{t,a}|x_{t,a}]| \leq \alpha \sqrt{x_{t,a}^{T}D_{a}^{T}D_{a}+I_{d})^{-1}x_{t,a}}$。<br>注意到这里arm的选择策略：$a_{t} = \arg\max\limits_{a \in A_{t}}(x_{t,a}^{T}+\alpha \sqrt{x_{t,a}^{T}A_{a}^{-1}x_{t,a}})$。<br>实际使用中，arm的选择通常存在一个Exploration&amp;Exploitation的问题，这里采用的是UCB的方案，并且将置信上界的计算直接融入到模型优化中，实际算法如下图所示：</p>
+<p><img src="/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/LinUCB.png" alt="LinUCB"></p>
+<h3 id="2-2-Hybrid-LinUCB"><a href="#2-2-Hybrid-LinUCB" class="headerlink" title="2.2 Hybrid LinUCB"></a>2.2 Hybrid LinUCB</h3><p><strong>上面的模型中各个arm的参数$\theta$互不影响，分开计算；但实际中可能有一些特征是所有arm共享的。</strong>因此，衍生出了如下模型：</p>
+<script type="math/tex; mode=display">E[r_{t,a}|x_{t,a}] = z_{t,a}^{T}\beta^{*}+x_{t,a}^{T}\theta_{a}^{*}</script><p>这里的参数$\beta^{*}$由所有的arm共享。实际算法如下图所示：</p>
+<p><img src="/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/Hybrid-LinUCB.png" alt="Hybrid-LinUCB"></p>
+<h3 id="2-3-LinUCB算法的优点"><a href="#2-3-LinUCB算法的优点" class="headerlink" title="2.3 LinUCB算法的优点"></a>2.3 LinUCB算法的优点</h3><ul>
+<li>考虑了上下文特征，可以处理动态的推荐资源池，在资源池增大时，效果更好。</li>
+<li>收敛速度比UCB快，但需要合适的特征工程方案，这是实际使用中工程人员需要发挥的地方。</li>
+</ul>
+<h2 id="3-参考资料"><a href="#3-参考资料" class="headerlink" title="3. 参考资料"></a>3. 参考资料</h2><p>[1] <a href="https://arxiv.org/abs/1003.0146" target="_blank" rel="noopener">A Contextual-Bandit Approach to Personalized News Article Recommendation</a><br>[2] <a href="http://x-algo.cn/index.php/2016/12/15/ee-problem-and-bandit-algorithm-for-recommender-systems/" target="_blank" rel="noopener">推荐系统的EE问题及Bandit算法</a><br>[3] <a href="http://www.xfyun.cn/share/?p=2606" target="_blank" rel="noopener">Bandit算法与推荐系统</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-强化学习中的A3C算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -726,7 +837,7 @@ min_{w} \frac{\lambda}{2}||w||_{2}^{2}+\sum\limits_{i=1}^{m}log(1+exp(-y_{i}\phi
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2017 Elias Xu
+    		&copy; 2018 Elias Xu
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -822,7 +933,7 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">强化学习，算法</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -830,11 +941,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">强化学习、TensorFlow</a>
+                <a href="javascript:void(0)" class="js-tag color3">强化学习，算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">强化学习、TensorFlow</a>
               </li>
             
             <div class="clearfix"></div>
