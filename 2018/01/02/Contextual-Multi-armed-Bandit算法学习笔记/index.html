@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://andyxzq.github.io/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/multi-arm-bandit.jpg">
 <meta property="og:image" content="http://andyxzq.github.io/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/LinUCB.png">
 <meta property="og:image" content="http://andyxzq.github.io/2018/01/02/Contextual-Multi-armed-Bandit算法学习笔记/Hybrid-LinUCB.png">
-<meta property="og:updated_time" content="2018-01-14T07:20:04.000Z">
+<meta property="og:updated_time" content="2018-01-14T07:20:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Contextual Multi-armed Bandit算法学习笔记">
 <meta name="twitter:description" content="1. multi-armed bandit问题定义  多臂老虎机问题的定义如下：   一排K个老虎机$a_i\{i=1,2,…,K\}$； 每个老虎机对应有回报$r_i\{i=1,2,…,K\}$，事先并不知道； 在每一个时间t拉动一个老虎机会产生一个回报$r_{t}$； 目标：根据特定的策略选择$a$，从而最小化累计遗憾值$L_{T}=E[\sum \limits_{\tau=1}^{T}r^{">
@@ -73,6 +73,10 @@
     		
     			
     			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
     			
             
     			
@@ -321,6 +325,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2018/02/11/NLP之记忆网络-Memory-Network-学习笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          NLP之记忆网络(Memory Network)学习笔记
+        
+      </div>
+    </a>
+  
   
     <a href="/2017/12/17/强化学习中的A3C算法/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">强化学习中的A3C算法</div>
@@ -431,17 +444,25 @@ MathJax.Hub.Queue(function() {
       
       
     
+      
+      
+      
+    
     
 
     <ul style="width: 70%">
     
     
       
-      <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
       
         
       
-      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
       
         
     </ul>
@@ -466,19 +487,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">机器学习、互联网广告</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">强化学习，算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
+                <a href="javascript:void(0)" class="js-tag color3">NLP, QA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">机器学习、互联网广告</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">强化学习、TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
               </li>
             
             <div class="clearfix"></div>
@@ -524,6 +549,10 @@ MathJax.Hub.Queue(function() {
     	</section>
     
 
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+    	</section>
     
 
     
