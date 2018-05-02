@@ -156,6 +156,125 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-TensorFlow高级API-Dataset和Estimator的使用介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/02/TensorFlow高级API-Dataset和Estimator的使用介绍/">TensorFlow高级API-Dataset和Estimator的使用介绍</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/02/TensorFlow高级API-Dataset和Estimator的使用介绍/" class="archive-article-date">
+  	<time datetime="2018-05-02T08:20:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-TensorFlow简介"><a href="#1-TensorFlow简介" class="headerlink" title="1.TensorFlow简介"></a>1.TensorFlow简介</h2><blockquote>
+<p>TensorFlow是Google Brain团队开发的第二代机器学习开源软件库。它基于有状态的数据流图(Data Flow Graph)来表达计算过程，名称中的Tensor称之为张量，Flow可理解为张量在数据流图的节点之间流动，从而完成前向计算过程。TF可以进行自动微分，极大简化了机器学习模型的构建过程。此外，支持分布式的训练在GPU上，核心引擎基于C++编写，提供了python、java、go等接口，目前已被很多公司用做深度学习模型的开发工具。</p>
+</blockquote>
+<h2 id="2-Dataset和Estimator简介"><a href="#2-Dataset和Estimator简介" class="headerlink" title="2. Dataset和Estimator简介"></a>2. Dataset和Estimator简介</h2><blockquote>
+<p>使用TensorFlow的底层API开发机器学习模型时，需要显式地定义模型中的变量和输入数据、以及对会话进行显式的声明和管理，这需要不小的编码量。而使用更高层的Dataset工具类可以很轻松、高效地处理大量的输入数据以及不同的数据格式，相比基于feed_dict的数据输入方式更加高效和规整。并且使用Estimator工具类可以简化机器学习模型的构建过程，Estimator可以自动管理图的构建、变量初始化、模型保存及恢复过程。对一般机器学习pipeline中的训练、评估、预测三个过程进行统一管理。</p>
+</blockquote>
+<h3 id="2-1-Dataset介绍"><a href="#2-1-Dataset介绍" class="headerlink" title="2.1 Dataset介绍"></a>2.1 Dataset介绍</h3><blockquote>
+<p>Dataset表示一系列元素的集合。其中的每个元素可以是单个或者多个Tensor对象。此外，Dataset包含了一系列作用于这些元素上的操作，包含map、flat_map、filter、repeat、shuffle、skip、take等，这类似于Spark中的RDD。</p>
+</blockquote>
+<ul>
+<li><p>Dataset的创建</p>
+<ul>
+<li>基于from_tensor_slices方法从tensor中创建，tensor通常来源于numpy Array或者pandas DataFrame</li>
+<li>基于TextLineDataset从多个文本文件中创建</li>
+<li>基于TFRecordDataset从多个TFRecord文件中创建，TFRecord是针对大批量数据以二进制进行存储的一种存储格式</li>
+</ul>
+</li>
+<li><p>Dataset的遍历</p>
+<ul>
+<li>基于Iterator进行遍历，make_one_shot_iterator()方法可以生成iterator，调用Iterator的get_next()方法就可以得到下一个Dataset中的元素。Dataset主要用于后续Estimator的输入函数中，示例如下：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#自定义训练和评估输入函数</span><br><span class="line">def train_input_fn(features, labels, batch_size):</span><br><span class="line">    dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))</span><br><span class="line">    dataset = dataset.shuffle(1000).repeat(1).batch(batch_size)</span><br><span class="line">    iterator = dataset.make_one_shot_iterator()</span><br><span class="line">    return iterator.get_next()</span><br><span class="line"></span><br><span class="line">def eval_input_fn(features, labels, batch_size):</span><br><span class="line">    dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))</span><br><span class="line">    dataset = dataset.batch(batch_size)</span><br><span class="line">    iterator = dataset.make_one_shot_iterator()</span><br><span class="line">    return iterator.get_next()</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-Estimator介绍"><a href="#2-2-Estimator介绍" class="headerlink" title="2.2 Estimator介绍"></a>2.2 Estimator介绍</h3><blockquote>
+<p>Estimator封装了模型的构建、训练、评估、预估以及保存过程，将数据的输入从模型中分离出来。数据输入需要编写单独的函数。</p>
+</blockquote>
+<ul>
+<li><p>预定义的Estimator</p>
+<ul>
+<li>tf.estimator中内置了GBDT、DNN、LinearClassifer等多种模型，在使用这些模型前，需要指定数据中的特征列，特征列告诉模型如何对数据进行特征工程，tf.feature_column提供了多种常用的用于创建特征列的方法，包含类别型、数值型、类别型特征onehot、数值型特征分桶等。也可以将keras模型转换成estimator。</li>
+</ul>
+</li>
+<li><p>自定义Estimator</p>
+<ul>
+<li>预定义的Estimator不能满足需求时，就可以自定义Estimator。主要是要自定义model函数，函数签名为model_fn(features, labels, mode, param)，features和labels是输入函数返回的特征和标签，mode表示是要进行模型的训练、评估还是测试。param是传入的额外参数。针对Google提出的wide&amp;deep模型的model_fn如下：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def wide_deep_model_fn(features, labels, mode, params):</span><br><span class="line">    #分别产生deep和wide部分的输入</span><br><span class="line">    deep_input = tf.feature_column.input_layer(features, params[&apos;deep_feature_columns&apos;])</span><br><span class="line">    wide_input = tf.feature_column.input_layer(features, params[&apos;wide_feature_columns&apos;])</span><br><span class="line">    </span><br><span class="line">    hidden1 = tf.layers.dense(deep_input, units=params[&apos;hidden_units&apos;][0], activation=tf.nn.relu)</span><br><span class="line">    hidden2 = tf.layers.dense(hidden1, units=params[&apos;hidden_units&apos;][1], activation=tf.nn.relu)</span><br><span class="line">    deep_logits = tf.layers.dense(hidden2, 1, activation=None)</span><br><span class="line">    wide_logits = tf.layers.dense(wide_input, 1, activation=None)</span><br><span class="line">    logits = deep_logits + wide_logits</span><br><span class="line">    loss = tf.losses.sigmoid_cross_entropy(multi_class_labels=labels, logits=tf.squeeze(logits))</span><br><span class="line">    </span><br><span class="line">    predicted_class = tf.cast(logits &gt; 0, tf.float32)</span><br><span class="line">    auc = tf.metrics.auc(labels, predicted_class)</span><br><span class="line">    metrics = &#123;&apos;auc&apos;: auc&#125;</span><br><span class="line">    if mode == tf.estimator.ModeKeys.EVAL:</span><br><span class="line">        return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops=metrics)</span><br><span class="line">    </span><br><span class="line">    optimizer = tf.train.AdamOptimizer(learning_rate=0.01)</span><br><span class="line">    train_op = optimizer.minimize(loss, global_step=tf.train.get_global_step())</span><br><span class="line">    if mode == tf.estimator.ModeKeys.TRAIN:</span><br><span class="line">        return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)</span><br></pre></td></tr></table></figure>
+<h2 id="3-Dataset和Estimator的完整使用流程"><a href="#3-Dataset和Estimator的完整使用流程" class="headerlink" title="3 Dataset和Estimator的完整使用流程"></a>3 Dataset和Estimator的完整使用流程</h2><ol>
+<li>定义用于训练和评估的输入函数input_fn;</li>
+<li>根据数据集的特点，定义好feature_column;</li>
+<li>使用预定义的Estimator或者自定义模型函数;</li>
+<li>调用Estimator的train、eval和predict方法产生结果。</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/02/TensorFlow高级API-Dataset和Estimator的使用介绍/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-NLP之记忆网络-Memory-Network-学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1099,15 +1218,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">机器学习、互联网广告</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
+                <a href="javascript:void(0)" class="js-tag color1">强化学习、TensorFlow</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">强化学习、TensorFlow</a>
+                <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
               </li>
             
             <div class="clearfix"></div>

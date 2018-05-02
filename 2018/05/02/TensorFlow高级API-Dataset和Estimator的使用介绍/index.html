@@ -6,29 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://andyxzq.github.io">
-  <title>Reinforcement Learning-学习笔记 | 好奇小青年的博客</title>
+  <title>TensorFlow高级API-Dataset和Estimator的使用介绍 | 好奇小青年的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.&amp;nbsp;定义和特点  强化学习(Reinforcement Learning)解决的是代理(Agent)在未知环境(Environment)中通过交互(Interaction)进行学习的方法。不同于监督学习和无监督学习，属于第三种机器学习范式。(By Richard Sutton) 没有样本标签，只有行">
-<meta name="keywords" content="强化学习，算法">
+  <meta name="description" content="1.TensorFlow简介 TensorFlow是Google Brain团队开发的第二代机器学习开源软件库。它基于有状态的数据流图(Data Flow Graph)来表达计算过程，名称中的Tensor称之为张量，Flow可理解为张量在数据流图的节点之间流动，从而完成前向计算过程。TF可以进行自动微分，极大简化了机器">
+<meta name="keywords" content="TensorFlow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Reinforcement Learning-学习笔记">
-<meta property="og:url" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/index.html">
+<meta property="og:title" content="TensorFlow高级API-Dataset和Estimator的使用介绍">
+<meta property="og:url" content="http://andyxzq.github.io/2018/05/02/TensorFlow高级API-Dataset和Estimator的使用介绍/index.html">
 <meta property="og:site_name" content="好奇小青年的博客">
-<meta property="og:description" content="1.&amp;nbsp;定义和特点  强化学习(Reinforcement Learning)解决的是代理(Agent)在未知环境(Environment)中通过交互(Interaction)进行学习的方法。不同于监督学习和无监督学习，属于第三种机器学习范式。(By Richard Sutton) 没有样本标签，只有行动的奖励信号。 最终反馈结果的获得是延迟的。 主要针对有前后关系的序列数据，无独立同分">
+<meta property="og:description" content="1.TensorFlow简介 TensorFlow是Google Brain团队开发的第二代机器学习开源软件库。它基于有状态的数据流图(Data Flow Graph)来表达计算过程，名称中的Tensor称之为张量，Flow可理解为张量在数据流图的节点之间流动，从而完成前向计算过程。TF可以进行自动微分，极大简化了机器学习模型的构建过程。此外，支持分布式的训练在GPU上，核心引擎基于C++编写，提">
 <meta property="og:locale" content="中文">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Agent-Environment.png">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Policy-Iteration.png">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Value-Iteration.png">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Monte-Carlo.png">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Temporal-Difference.png">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Q-Learning.png">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/REINFORCE.png">
-<meta property="og:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Actor-Critic.png">
-<meta property="og:updated_time" content="2017-11-27T08:37:52.000Z">
+<meta property="og:updated_time" content="2018-05-02T08:33:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Reinforcement Learning-学习笔记">
-<meta name="twitter:description" content="1.&amp;nbsp;定义和特点  强化学习(Reinforcement Learning)解决的是代理(Agent)在未知环境(Environment)中通过交互(Interaction)进行学习的方法。不同于监督学习和无监督学习，属于第三种机器学习范式。(By Richard Sutton) 没有样本标签，只有行动的奖励信号。 最终反馈结果的获得是延迟的。 主要针对有前后关系的序列数据，无独立同分">
-<meta name="twitter:image" content="http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/Agent-Environment.png">
+<meta name="twitter:title" content="TensorFlow高级API-Dataset和Estimator的使用介绍">
+<meta name="twitter:description" content="1.TensorFlow简介 TensorFlow是Google Brain团队开发的第二代机器学习开源软件库。它基于有状态的数据流图(Data Flow Graph)来表达计算过程，名称中的Tensor称之为张量，Flow可理解为张量在数据流图的节点之间流动，从而完成前向计算过程。TF可以进行自动微分，极大简化了机器学习模型的构建过程。此外，支持分布式的训练在GPU上，核心引擎基于C++编写，提">
   
     <link rel="alternative" href="/atom.xml" title="好奇小青年的博客" type="application/atom+xml">
   
@@ -164,130 +155,72 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Reinforcement-Learning-学习笔记" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-TensorFlow高级API-Dataset和Estimator的使用介绍" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Reinforcement Learning-学习笔记
+      TensorFlow高级API-Dataset和Estimator的使用介绍
     </h1>
   
 
         
-        <a href="/2017/11/26/Reinforcement-Learning-学习笔记/" class="archive-article-date">
-  	<time datetime="2017-11-26T08:44:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-26</time>
+        <a href="/2018/05/02/TensorFlow高级API-Dataset和Estimator的使用介绍/" class="archive-article-date">
+  	<time datetime="2018-05-02T08:20:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-02</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-nbsp-定义和特点"><a href="#1-nbsp-定义和特点" class="headerlink" title=" 1.&nbsp;定义和特点"></a> 1.&nbsp;定义和特点</h1><blockquote>
-<ul>
-<li>强化学习(Reinforcement Learning)解决的是代理(Agent)在未知环境(Environment)中通过交互(Interaction)进行学习的方法。不同于监督学习和无监督学习，属于第三种机器学习范式。(By Richard Sutton)</li>
-<li>没有样本标签，只有行动的奖励信号。</li>
-<li>最终反馈结果的获得是延迟的。</li>
-<li>主要针对有前后关系的序列数据，无独立同分布假设。</li>
-<li>当前行为会影响后续收到的回报值大小。</li>
-</ul>
+        <h2 id="1-TensorFlow简介"><a href="#1-TensorFlow简介" class="headerlink" title="1.TensorFlow简介"></a>1.TensorFlow简介</h2><blockquote>
+<p>TensorFlow是Google Brain团队开发的第二代机器学习开源软件库。它基于有状态的数据流图(Data Flow Graph)来表达计算过程，名称中的Tensor称之为张量，Flow可理解为张量在数据流图的节点之间流动，从而完成前向计算过程。TF可以进行自动微分，极大简化了机器学习模型的构建过程。此外，支持分布式的训练在GPU上，核心引擎基于C++编写，提供了python、java、go等接口，目前已被很多公司用做深度学习模型的开发工具。</p>
 </blockquote>
-<h1 id="2-nbsp-四个基本组件"><a href="#2-nbsp-四个基本组件" class="headerlink" title="2.&nbsp;四个基本组件"></a>2.&nbsp;四个基本组件</h1><ul>
-<li><p><strong>策略(Policy)</strong>: 当前Agent所处状态到下一步采取行动的映射，是强化学习的学习目标。</p>
-</li>
-<li><p><strong>回报(Reward)</strong>: 衡量Agent采取的行动的好坏的值。</p>
-</li>
-<li><p><strong>状态值函数(Value Function)</strong>: 从当前状态开始获得的预期长期累计回报，代表对当前状态价值高低的估计。</p>
-</li>
-<li><p><strong>环境模型(Model)</strong>: 对当前环境中各个变量变化情况的建模表示。典型的是离散变量下的概率分布模型。</p>
-</li>
-</ul>
-<h1 id="3-nbsp-四个重要概念"><a href="#3-nbsp-四个重要概念" class="headerlink" title="3.&nbsp;四个重要概念"></a>3.&nbsp;四个重要概念</h1><ul>
-<li><p><strong>Agent</strong>: 学习在未知环境中做决策的对象。例如棋类游戏中的棋子。</p>
-</li>
-<li><p><strong>Environment</strong>: Agent的交互对象，针对Agent的行动，给出回报及下一步的状态。</p>
-</li>
-<li><p><strong>Policy</strong>: $\pi_{t}(a_{t}|s_{t})$</p>
-</li>
-</ul>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/Agent-Environment.png" alt="Agent-Environment"></p>
-<ul>
-<li><strong>长期累积回报</strong>: $G_{t}=R_{t+1}+\gamma R_{t+2}+\gamma^{2}R_{t+3}+\cdots=\sum\limits_{k=0}^{n}\gamma^{k}R_{t+k+1}$, $\gamma$ 是折扣因子。Agent的目标就是通过与环境的不断交互，学习最优的策略，从而最大化长期累计回报。</li>
-</ul>
-<h1 id="4-nbsp-MDP-Markov-Decision-Process"><a href="#4-nbsp-MDP-Markov-Decision-Process" class="headerlink" title="4.&nbsp;MDP(Markov Decision Process)"></a>4.&nbsp;MDP(Markov Decision Process)</h1><ul>
-<li>MDP描述了一种用概率分布建模的环境，环境中的状态转移具有马尔科夫性，即<strong>下一时刻的状态只与当前状态s和采取的动作a有关，而与之前的状态和动作无关</strong>。针对强化学习要解决的环境交互式学习任务，往往简化其环境是MDP，方便求解。</li>
-</ul>
-<script type="math/tex; mode=display">P(S_{t+1}=s', R_{t+1}=r|S_{0},A_{0},R_{1},...,S_{t},A_{t})=P(S_{t+1}=s', R_{t+1}|S_{t}=s,A_{t}=a)</script><h1 id="5-nbsp-状态值函数，动作价值函数与Bellamn方程"><a href="#5-nbsp-状态值函数，动作价值函数与Bellamn方程" class="headerlink" title="5.&nbsp;状态值函数，动作价值函数与Bellamn方程"></a>5.&nbsp;状态值函数，动作价值函数与Bellamn方程</h1><blockquote>
-<ul>
-<li><p>$v_{\pi}(s) = E_{\pi}[G_{t}|S_{t}=s]=E_{\pi}[\sum\limits_{k=0}^{n}\gamma^{k}R_{t+k+1}|S_{t}=s]$</p>
-</li>
-<li><p>$q_{\pi}(s, a) = E_{\pi}[G_{t}|S_{t}=s, A_{t}=a]=E_{\pi}[\sum\limits_{k=0}^{n}\gamma^{k}R_{t+k+1}|S_{t}=s,A_{t}=a]$</p>
-</li>
-<li><p>Bellman方程: $v_{\pi}(s) = \sum\limits_{a}\pi(a|s)\sum\limits_{s’, r}p(s’,r|s,a)[r+\gamma v_{\pi}(s’)]$ &lt;—&gt; 状态值函数递归求解方程</p>
-</li>
-<li><p>最优值函数: $v_{\star}(s) = \max\limits_{\pi}v_{\pi}(s) \Rightarrow v_{\star}(s)=\max\limits_{a \in A(s)}=\sum\limits_{s’, r}p(s’,r|s,a)[r+\gamma v_{\star}(s’)]$</p>
-</li>
-<li><p>最优动作价值函数: $q_{\star}(s, a) = \max\limits_{\pi}q_{\pi}(s, a) \Rightarrow q_{\star}(s, a)=\sum\limits_{s’, r}p(s’, r|s,a)[r + \gamma \max\limits_{a’}q_{\star}(s’, a’)]$</p>
-</li>
-<li><p>动作价值函数在求解最优策略时更加直接，所以更加常用。</p>
-</li>
-</ul>
+<h2 id="2-Dataset和Estimator简介"><a href="#2-Dataset和Estimator简介" class="headerlink" title="2. Dataset和Estimator简介"></a>2. Dataset和Estimator简介</h2><blockquote>
+<p>使用TensorFlow的底层API开发机器学习模型时，需要显式地定义模型中的变量和输入数据、以及对会话进行显式的声明和管理，这需要不小的编码量。而使用更高层的Dataset工具类可以很轻松、高效地处理大量的输入数据以及不同的数据格式，相比基于feed_dict的数据输入方式更加高效和规整。并且使用Estimator工具类可以简化机器学习模型的构建过程，Estimator可以自动管理图的构建、变量初始化、模型保存及恢复过程。对一般机器学习pipeline中的训练、评估、预测三个过程进行统一管理。</p>
 </blockquote>
-<h1 id="6-nbsp-依赖模型的最优策略函数计算：策略迭代与值迭代"><a href="#6-nbsp-依赖模型的最优策略函数计算：策略迭代与值迭代" class="headerlink" title="6.&nbsp;依赖模型的最优策略函数计算：策略迭代与值迭代"></a>6.&nbsp;依赖模型的最优策略函数计算：策略迭代与值迭代</h1><blockquote>
-<p><strong>策略迭代: 包含策略评估和策略提升两个部分。</strong></p>
-</blockquote>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/Policy-Iteration.png" alt="Policy-Iteraion"></p>
-<blockquote>
-<p><strong>值迭代: 直接迭代计算状态值函数。</strong></p>
-</blockquote>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/Value-Iteration.png" alt="Value-Iteraion"></p>
-<blockquote>
-<p><strong>策略迭代和值迭代都是一种动态规划的思路，都需要事先知道环境的具体MDP模型，但实际情况中很难预先估计。</strong></p>
-</blockquote>
-<h1 id="7-nbsp-模型无关的值函数计算-Monte-Carlo和Temporal-Difference"><a href="#7-nbsp-模型无关的值函数计算-Monte-Carlo和Temporal-Difference" class="headerlink" title="7.&nbsp;模型无关的值函数计算: Monte-Carlo和Temporal-Difference"></a>7.&nbsp;模型无关的值函数计算: Monte-Carlo和Temporal-Difference</h1><ul>
-<li>模型无关的值函数估计方法不需要事先知道环境的具体模型，主要通过与环境交互过程中产生的实际经验${s_{t},a_{t},r_{t+1},s_{t+1},a_{t+1},r_{t+2},…,s_{T},a_{T},r_{T+1}}$来直接估计值函数。</li>
-</ul>
-<blockquote>
-<p>Monte-Carlo方法: 使用完整经验片段(episode)中最终回报的平均值来估计值函数。</p>
-</blockquote>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/Monte-Carlo.png" alt="Monte-Carlo"></p>
-<blockquote>
-<p>Temporal-Difference方法: 从不完整的经验片段中估计值函数。</p>
-</blockquote>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/Temporal-Difference.png" alt="Temporal-Difference"></p>
-<blockquote>
-<p>Q-Learning: TD方法的一种，直接估计动作价值Q函数。</p>
-</blockquote>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/Q-Learning.png" alt="Q-Learning"></p>
-<h1 id="8-nbsp-近似求解方案"><a href="#8-nbsp-近似求解方案" class="headerlink" title="8.&nbsp;近似求解方案"></a>8.&nbsp;近似求解方案</h1><blockquote>
-<ul>
-<li><p>前面的强化学习算法一般是将(s,a)存在一张表中，在状态空间或动作空间很大时，耗费内存空间并且泛化能力差，使用函数来近似值函数或动作价值函数可以避免这些问题。即$v_{\pi}(s) \approx \hat{v}(s,w)或q_{\pi}(s)=\hat{q}(s,a,w)$，这里w是函数的参数。</p>
-</li>
-<li><p>常见的近似函数优线性函数和神经网络。线性函数往往需要精心构造表示状态的特征，而神经网络可以直接接受原始输入。</p>
-</li>
-<li><p>Deepmind开发的玩Atari游戏的DQN和围棋程序Alphago的策略网络都使用了卷积神经网络来近似值函数或动作价值函数，展现了优异的结果。</p>
-</li>
-</ul>
-</blockquote>
-<h1 id="9-nbsp-策略梯度方法"><a href="#9-nbsp-策略梯度方法" class="headerlink" title="9.&nbsp;策略梯度方法"></a>9.&nbsp;策略梯度方法</h1><blockquote>
-<p>直接近似策略函数: $\pi\{a|s,\theta\}=p(A_{t}=a|S_{t}=s,\theta_{t}=\theta)$。直接根据状态计算出最终的动作值.</p>
+<h3 id="2-1-Dataset介绍"><a href="#2-1-Dataset介绍" class="headerlink" title="2.1 Dataset介绍"></a>2.1 Dataset介绍</h3><blockquote>
+<p>Dataset表示一系列元素的集合。其中的每个元素可以是单个或者多个Tensor对象。此外，Dataset包含了一系列作用于这些元素上的操作，包含map、flat_map、filter、repeat、shuffle、skip、take等，这类似于Spark中的RDD。</p>
 </blockquote>
 <ul>
-<li>REINFORCE方法: 根据策略函数梯度更新参数值。</li>
-</ul>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/REINFORCE.png" alt="REINFORCE"></p>
+<li><p>Dataset的创建</p>
 <ul>
-<li>Actor-Critic方法: 结合使用值函数近似和策略函数近似。值函数作为critic来知道策略函数的训练。</li>
+<li>基于from_tensor_slices方法从tensor中创建，tensor通常来源于numpy Array或者pandas DataFrame</li>
+<li>基于TextLineDataset从多个文本文件中创建</li>
+<li>基于TFRecordDataset从多个TFRecord文件中创建，TFRecord是针对大批量数据以二进制进行存储的一种存储格式</li>
 </ul>
-<p><img src="/2017/11/26/Reinforcement-Learning-学习笔记/Actor-Critic.png" alt="Actor-Critic"></p>
-<h1 id="10-nbsp-强化学习的应用"><a href="#10-nbsp-强化学习的应用" class="headerlink" title="10.&nbsp;强化学习的应用"></a>10.&nbsp;强化学习的应用</h1><ul>
-<li>游戏AI: 视频游戏(Atari、星际争霸)，棋类游戏(围棋)</li>
-<li>Web服务: 新闻(Yahoo!)、广告、商品个性化推荐(Alibaba)</li>
-<li>机器人控制</li>
-<li>聊天机器人</li>
+</li>
+<li><p>Dataset的遍历</p>
+<ul>
+<li>基于Iterator进行遍历，make_one_shot_iterator()方法可以生成iterator，调用Iterator的get_next()方法就可以得到下一个Dataset中的元素。Dataset主要用于后续Estimator的输入函数中，示例如下：</li>
 </ul>
-<h1 id="11-nbsp-参考资料"><a href="#11-nbsp-参考资料" class="headerlink" title="11.&nbsp;参考资料"></a>11.&nbsp;参考资料</h1><p>[1]<a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html" target="_blank" rel="noopener">Reinforcement Learning Lecture by David Silver</a>&lt;/br&gt;<br>[2]<a href="http://rll.berkeley.edu/deeprlcourse/" target="_blank" rel="noopener">CS 294: Deep Reinforcement Learning by UC Berkeley</a>&lt;/br&gt;<br>[3]<a href="https://morvanzhou.github.io/tutorials/machine-learning/reinforcement-learning/" target="_blank" rel="noopener">强化学习by莫凡</a>&lt;/br&gt;<br>[4]<a href="http://incompleteideas.net/sutton/book/the-book-2nd.html" target="_blank" rel="noopener">Reinforcement Learning: An Introduction (2nd Edition) by Richar Sutton</a>&lt;/br&gt;<br>[5] <a href="https://github.com/ShangtongZhang/reinforcement-learning-an-introduction" target="_blank" rel="noopener">https://github.com/ShangtongZhang/reinforcement-learning-an-introduction</a>&lt;/br&gt;<br>[6]<a href="https://gym.openai.com/" target="_blank" rel="noopener">OpenAI Gym</a>(比较不同强化学习算法的软件环境平台，包含很多游戏环境)&lt;/br&gt;<br>[7]<a href="https://deepmind.com/research/publications/" target="_blank" rel="noopener">Deepmind Rearch Blog</a>&lt;/br&gt;<br>[8]<a href="https://arxiv.org/abs/1701.07274" target="_blank" rel="noopener">Deep Reinforcement Learning: An Overview by Yuxi Li</a></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#自定义训练和评估输入函数</span><br><span class="line">def train_input_fn(features, labels, batch_size):</span><br><span class="line">    dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))</span><br><span class="line">    dataset = dataset.shuffle(1000).repeat(1).batch(batch_size)</span><br><span class="line">    iterator = dataset.make_one_shot_iterator()</span><br><span class="line">    return iterator.get_next()</span><br><span class="line"></span><br><span class="line">def eval_input_fn(features, labels, batch_size):</span><br><span class="line">    dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))</span><br><span class="line">    dataset = dataset.batch(batch_size)</span><br><span class="line">    iterator = dataset.make_one_shot_iterator()</span><br><span class="line">    return iterator.get_next()</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-Estimator介绍"><a href="#2-2-Estimator介绍" class="headerlink" title="2.2 Estimator介绍"></a>2.2 Estimator介绍</h3><blockquote>
+<p>Estimator封装了模型的构建、训练、评估、预估以及保存过程，将数据的输入从模型中分离出来。数据输入需要编写单独的函数。</p>
+</blockquote>
+<ul>
+<li><p>预定义的Estimator</p>
+<ul>
+<li>tf.estimator中内置了GBDT、DNN、LinearClassifer等多种模型，在使用这些模型前，需要指定数据中的特征列，特征列告诉模型如何对数据进行特征工程，tf.feature_column提供了多种常用的用于创建特征列的方法，包含类别型、数值型、类别型特征onehot、数值型特征分桶等。也可以将keras模型转换成estimator。</li>
+</ul>
+</li>
+<li><p>自定义Estimator</p>
+<ul>
+<li>预定义的Estimator不能满足需求时，就可以自定义Estimator。主要是要自定义model函数，函数签名为model_fn(features, labels, mode, param)，features和labels是输入函数返回的特征和标签，mode表示是要进行模型的训练、评估还是测试。param是传入的额外参数。针对Google提出的wide&amp;deep模型的model_fn如下：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def wide_deep_model_fn(features, labels, mode, params):</span><br><span class="line">    #分别产生deep和wide部分的输入</span><br><span class="line">    deep_input = tf.feature_column.input_layer(features, params[&apos;deep_feature_columns&apos;])</span><br><span class="line">    wide_input = tf.feature_column.input_layer(features, params[&apos;wide_feature_columns&apos;])</span><br><span class="line">    </span><br><span class="line">    hidden1 = tf.layers.dense(deep_input, units=params[&apos;hidden_units&apos;][0], activation=tf.nn.relu)</span><br><span class="line">    hidden2 = tf.layers.dense(hidden1, units=params[&apos;hidden_units&apos;][1], activation=tf.nn.relu)</span><br><span class="line">    deep_logits = tf.layers.dense(hidden2, 1, activation=None)</span><br><span class="line">    wide_logits = tf.layers.dense(wide_input, 1, activation=None)</span><br><span class="line">    logits = deep_logits + wide_logits</span><br><span class="line">    loss = tf.losses.sigmoid_cross_entropy(multi_class_labels=labels, logits=tf.squeeze(logits))</span><br><span class="line">    </span><br><span class="line">    predicted_class = tf.cast(logits &gt; 0, tf.float32)</span><br><span class="line">    auc = tf.metrics.auc(labels, predicted_class)</span><br><span class="line">    metrics = &#123;&apos;auc&apos;: auc&#125;</span><br><span class="line">    if mode == tf.estimator.ModeKeys.EVAL:</span><br><span class="line">        return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops=metrics)</span><br><span class="line">    </span><br><span class="line">    optimizer = tf.train.AdamOptimizer(learning_rate=0.01)</span><br><span class="line">    train_op = optimizer.minimize(loss, global_step=tf.train.get_global_step())</span><br><span class="line">    if mode == tf.estimator.ModeKeys.TRAIN:</span><br><span class="line">        return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)</span><br></pre></td></tr></table></figure>
+<h2 id="3-Dataset和Estimator的完整使用流程"><a href="#3-Dataset和Estimator的完整使用流程" class="headerlink" title="3 Dataset和Estimator的完整使用流程"></a>3 Dataset和Estimator的完整使用流程</h2><ol>
+<li>定义用于训练和评估的输入函数input_fn;</li>
+<li>根据数据集的特点，定义好feature_column;</li>
+<li>使用预定义的Estimator或者自定义模型函数;</li>
+<li>调用Estimator的train、eval和predict方法产生结果。</li>
+</ol>
 
       
 
@@ -327,7 +260,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">强化学习，算法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
         		</li>
       		
 		</ul>
@@ -383,7 +316,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://andyxzq.github.io/2017/11/26/Reinforcement-Learning-学习笔记/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://andyxzq.github.io/2018/05/02/TensorFlow高级API-Dataset和Estimator的使用介绍/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -397,15 +330,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/11/26/广告ctr预估中的FM和FFM模型/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          广告ctr预估中的FM和FFM模型
-        
-      </div>
-    </a>
   
+    <a href="/2018/02/11/NLP之记忆网络-Memory-Network-学习笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">NLP之记忆网络(Memory Network)学习笔记</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
