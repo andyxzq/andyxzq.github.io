@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
@@ -15,6 +15,7 @@
 <meta property="og:url" content="http://andyxzq.github.io/2017/12/17/强化学习中的A3C算法/index.html">
 <meta property="og:site_name" content="好奇小青年的博客">
 <meta property="og:description" content="1. A3C(Asynchronous Advantage Actor Critic)算法背景介绍 A3C算法[1]由DeepMind在2015年提出，基于Actor-Critic框架(参考下文)，并且通过异步并行训练多个agent的方式，在Atari 2600、TORCS、MuJoCo等视频游戏中都取得了优异的效果。此外，A3C既能适应于离散动作空间的控制，也能适应于连续动作空间的控制。  2.">
+<meta property="og:locale" content="中文">
 <meta property="og:image" content="http://andyxzq.github.io/2017/12/17/强化学习中的A3C算法/actor-critic-architecture.png">
 <meta property="og:updated_time" content="2017-12-17T08:28:38.000Z">
 <meta name="twitter:card" content="summary">
@@ -33,7 +34,7 @@
     #container.show {
       background: linear-gradient(200deg,#a0cfe4,#e8c37e);
     }
-  </style>
+  </style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
   
@@ -41,7 +42,7 @@
 </head>
 
 <body>
-  <div id="container" q-class="show:isCtnShow">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
@@ -480,11 +481,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">强化学习，算法</a>
+                <a href="javascript:void(0)" class="js-tag color3">NLP, QA</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NLP, QA</a>
+                <a href="javascript:void(0)" class="js-tag color3">强化学习，算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -492,11 +493,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">强化学习、TensorFlow</a>
+                <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">爬虫，python</a>
+                <a href="javascript:void(0)" class="js-tag color1">强化学习、TensorFlow</a>
               </li>
             
             <div class="clearfix"></div>
@@ -624,6 +625,23 @@ MathJax.Hub.Queue(function() {
     </div>
 
 </div>
-  </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>
