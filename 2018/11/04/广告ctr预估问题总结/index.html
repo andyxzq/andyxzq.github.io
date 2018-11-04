@@ -6,19 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://andyxzq.github.io">
-  <title>Archives: 2017 | 好奇小青年的博客</title>
+  <title>广告ctr预估问题总结 | 好奇小青年的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="目前就职于喜马拉雅FM，数据挖掘攻城狮一枚。">
-<meta name="keywords" content="数据挖掘，机器学习，人工智能">
-<meta property="og:type" content="website">
-<meta property="og:title" content="好奇小青年的博客">
-<meta property="og:url" content="http://andyxzq.github.io/archives/2017/index.html">
+  <meta name="description" content="1. 为什么要做ctr(click througth rate)预估 互联网广告行业涉及媒体、广告主和用户三方。准确的预估ctr对广告主来说可以获得更高的用户转化率，对用户来说可以找到自己感兴趣的物品，对媒体方来说可以带来更多收益。  2. 广告ctr预估怎么转化为数学问题 $p(y=1|x)=\sigma(w, x)">
+<meta name="keywords" content="ctr预估、机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="广告ctr预估问题总结">
+<meta property="og:url" content="http://andyxzq.github.io/2018/11/04/广告ctr预估问题总结/index.html">
 <meta property="og:site_name" content="好奇小青年的博客">
-<meta property="og:description" content="目前就职于喜马拉雅FM，数据挖掘攻城狮一枚。">
+<meta property="og:description" content="1. 为什么要做ctr(click througth rate)预估 互联网广告行业涉及媒体、广告主和用户三方。准确的预估ctr对广告主来说可以获得更高的用户转化率，对用户来说可以找到自己感兴趣的物品，对媒体方来说可以带来更多收益。  2. 广告ctr预估怎么转化为数学问题 $p(y=1|x)=\sigma(w, x)=\sigma(w, u_{x}, a_{x}, c_{x})$，$u_{x}$">
 <meta property="og:locale" content="中文">
+<meta property="og:updated_time" content="2018-11-04T08:21:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="好奇小青年的博客">
-<meta name="twitter:description" content="目前就职于喜马拉雅FM，数据挖掘攻城狮一枚。">
+<meta name="twitter:title" content="广告ctr预估问题总结">
+<meta name="twitter:description" content="1. 为什么要做ctr(click througth rate)预估 互联网广告行业涉及媒体、广告主和用户三方。准确的预估ctr对广告主来说可以获得更高的用户转化率，对用户来说可以找到自己感兴趣的物品，对媒体方来说可以带来更多收益。  2. 广告ctr预估怎么转化为数学问题 $p(y=1|x)=\sigma(w, x)=\sigma(w, u_{x}, a_{x}, c_{x})$，$u_{x}$">
   
     <link rel="alternative" href="/atom.xml" title="好奇小青年的博客" type="application/atom+xml">
   
@@ -150,174 +151,280 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-广告ctr预估问题总结" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      广告ctr预估问题总结
+    </h1>
+  
+
+        
+        <a href="/2018/11/04/广告ctr预估问题总结/" class="archive-article-date">
+  	<time datetime="2018-11-04T07:58:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-04</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-为什么要做ctr-click-througth-rate-预估"><a href="#1-为什么要做ctr-click-througth-rate-预估" class="headerlink" title="1. 为什么要做ctr(click througth rate)预估"></a>1. 为什么要做ctr(click througth rate)预估</h1><blockquote>
+<p>互联网广告行业涉及媒体、广告主和用户三方。准确的预估ctr对广告主来说可以获得更高的用户转化率，对用户来说可以找到自己感兴趣的物品，对媒体方来说可以带来更多收益。</p>
+</blockquote>
+<h1 id="2-广告ctr预估怎么转化为数学问题"><a href="#2-广告ctr预估怎么转化为数学问题" class="headerlink" title="2. 广告ctr预估怎么转化为数学问题"></a>2. 广告ctr预估怎么转化为数学问题</h1><ul>
+<li><p>$p(y=1|x)=\sigma(w, x)=\sigma(w, u_{x}, a_{x}, c_{x})$，$u_{x}$是用户特征、$a_{x}$是广告特征、$c_{x}$是上下文特征，本质上就是针对一个用户，在特定的情景下，预估其点击一个广告的概率问题。</p>
+</li>
+<li><p>这里的预估函数$\sigma(w, u_{x}, a_{x}, c_{x})$可以任意取，但问题在于怎么衡量其预估结果与真实情况之间的差距呢？</p>
+</li>
+<li><p>这里假设有n个样本$(x_{i}, y_{i})$，那么就希望预测结果$p(x_{i}, w)$和$y_{i}$尽可能接近。</p>
+</li>
+<li><p>整体上也就是希望似然函数$L(w, x_{i}, y_{i})=\prod\limits_{i=1}^{n}p(w, x_{i})^{y_{i}}(1-p(w,x_{i}))^{1-y_{i}}=\prod\limits_{i=1}^{n}\sigma(w, x_{i})^{y_{i}}(1-\sigma(w, x_{i}))^{1-y_{i}}$最大。</p>
+</li>
+<li><p>简单变化换后，就等价于最小化损失函数$Loss(w, x_{i}, y_{i}) = \frac{-\sum\limits_{i=1}^{n}(y_{i}log(\sigma(w, x_{i}))+(1-y_{i})log(1-\sigma(w,x_{i})))}{n}$</p>
+</li>
+<li><p>这样ctr预估问题就变成了一个机器学习的二分类问题。</p>
+</li>
+</ul>
+<h1 id="3-ctr预估问题的难点在哪"><a href="#3-ctr预估问题的难点在哪" class="headerlink" title="3. ctr预估问题的难点在哪"></a>3. ctr预估问题的难点在哪</h1><ul>
+<li>广告数据$(u_{x},a_{x},c_{x})$的特点<ul>
+<li>数据多：亿级到千亿级</li>
+<li>维度高: 百万维到上亿维</li>
+<li>很稀疏：90%都是0</li>
+<li>多域：年龄、性别、省份、时间、广告创意、广告文字、图片</li>
+<li>离散值：每个特征的取值都是有限的</li>
+</ul>
+</li>
+<li>特征x与标签y之间的关系未知，选取的$\sigma$函数往往带有主观偏见；不同的模型对输入的要求不同，简单模型往往需要工程人员对输入做大量变换，复杂模型往往难以解释。</li>
+<li>训练数据量大、维度高、模型复杂、响应时间严苛带来的线上工程化问题</li>
+</ul>
+<h1 id="4-工业界怎么做ctr预估"><a href="#4-工业界怎么做ctr预估" class="headerlink" title="4. 工业界怎么做ctr预估"></a>4. 工业界怎么做ctr预估</h1><ul>
+<li>主要是基于机器学习模型来对ctr进行计算，把ctr预估问题转化为二分类问题。</li>
+<li>离线训练的效果基于auc和logloss来衡量</li>
+<li>线上通过流量abtest来对比不同模型的效果</li>
+<li>模型一般每天都要进行离线训练，定时和线上的模型进行同步；针对复杂模型，线上一般都要定制实现</li>
+</ul>
+<h1 id="5-工业界ctr预估模型的演进"><a href="#5-工业界ctr预估模型的演进" class="headerlink" title="5. 工业界ctr预估模型的演进"></a>5. 工业界ctr预估模型的演进</h1><h2 id="5-1-general-linear-model"><a href="#5-1-general-linear-model" class="headerlink" title="5.1 general linear model"></a>5.1 general linear model</h2><ul>
+<li>Logistic Regression<ul>
+<li>$p(w,x)=\frac{1}{1+e^{-w^{T}x}}$</li>
+</ul>
+</li>
+<li>Piece-Wise linear model<ul>
+<li>阿里巴巴提出</li>
+<li>$p(w,x)=\sum\limits_{i=1}^{m}\frac{e^{u_{i}^{T}x}}{\sum\limits_{j=1}^{m}e^{u_{j}^{T}x}}·\frac{1}{1+e^{-w_{i}^{T}x}}$</li>
+</ul>
+</li>
+<li><p>GBDT+LR</p>
+<ul>
+<li>FaceBook提出</li>
+<li>使用gbdt对原始数据做特征交叉，然后再给到LR模型使用</li>
+</ul>
+</li>
+<li><p>优点：模型容易解释，容易存储</p>
+</li>
+<li>缺点：线性模型无法学习到不同特征之间的交叉效果，需要工程人员进行大量的手工特征交叉</li>
+</ul>
+<h2 id="5-2-non-linear-model"><a href="#5-2-non-linear-model" class="headerlink" title="5.2. non-linear model"></a>5.2. non-linear model</h2><h3 id="5-2-1-Factorization-Machine及其变种"><a href="#5-2-1-Factorization-Machine及其变种" class="headerlink" title="5.2.1 Factorization Machine及其变种"></a>5.2.1 Factorization Machine及其变种</h3><ul>
+<li>分解机在模型层面上引入特征之间的组合，并通过对特征进行隐向量分解来更好的学习特征交互项的参数。比较适合于稀疏的广告数据。</li>
+<li>FM<ul>
+<li>$\phi_{FM}(w, x) = w_{0}+\sum\limits_{i=1}^{n}w_{i}x_{i}+\sum\limits_{i=1}^{n-1}\sum\limits_{j=i+1}^{n}w_{ij}x_{i}x_{j} = w_{0}+\sum\limits_{i=1}^{n}w_{i}x_{i}+\sum\limits_{i=1}^{n-1}\sum\limits_{j=i+1}^{n}(v_{i}^{T}v_{j})x_{i}x_{j}$</li>
+</ul>
+</li>
+<li>Field-aware FM<ul>
+<li>$\phi_{FFM}(w, x) = w_{0}+\sum\limits_{i=1}^{n}w_{i}x_{i}+\sum\limits_{i=1}^{n-1}\sum\limits_{j=i+1}^{n}(v_{i,f_{j}} \cdot v_{j,f_{i}})x_{i}x_{j}$</li>
+<li>考虑到不同特征域之间组合时重要性的差异</li>
+</ul>
+</li>
+<li>Field-weighted FM<ul>
+<li>$\Phi_{FwFM}(x) = w_{0} + \sum\limits_{i=1}^{m}x_{i}w_{i} + \sum\limits_{i=1}^{m}\sum\limits_{j=i+1}^{m}x_{i}x_{j}<v_{i}, v_{j}="">r_{F(i),F(j)}$</v_{i},></li>
+</ul>
+</li>
+</ul>
+<h3 id="5-2-2-Neural-Network及和其他模型的融合"><a href="#5-2-2-Neural-Network及和其他模型的融合" class="headerlink" title="5.2.2 Neural Network及和其他模型的融合"></a>5.2.2 Neural Network及和其他模型的融合</h3><ul>
+<li>直觉是Neural Network Model有更大的capacity，可以学习更加复杂的特征的交叉关系</li>
+<li>Wide &amp; Deep<ul>
+<li>Google提出</li>
+<li>对LR和MLP进行融合，统一训练，综合dnn的记忆能力强和lr泛化能力强的特点</li>
+<li>$p(y=1|x)=\sigma(w_{wide}^{T}[x, \phi(x)]+w_{deep}^{T}a^{f}+b)$</li>
+</ul>
+</li>
+<li>DeepFM<ul>
+<li>华为提出</li>
+<li>对FM和MLP进行融合，统一训练，避开lr模型需要进行的大量特征工程</li>
+</ul>
+</li>
+<li>Deep &amp; Cross Network<ul>
+<li>Google提出</li>
+<li>相对于FM一般只能学习二阶域特征交叉，增加一个能显示学习更高阶域特征交叉的cross network，并与MLP进行融合</li>
+<li>$x_{l+1}=x_{0}x_{l}^{T}w_{l}+b_{l}+x_{l}$</li>
+</ul>
+</li>
+<li>Deep Interest Network<ul>
+<li>阿里巴巴提出</li>
+<li>更好地利用电商网站用户历史行为数据中的多样性和局部激活的特点</li>
+<li>利用注意力机制和用户的历史行为来对用户进行更好的表征</li>
+<li>$V_{u}=\sum\limits_{i=1}^{N}=g(V_{i}, V_{a})*V_{i}$</li>
+</ul>
+</li>
+<li>XDeepFM<ul>
+<li>MSRA提出</li>
+<li>一方面通过dnn来隐式地学习特征之间的交叉，一方面在模型层面显示地学习不同域的特征交叉，比DeepFM更加通用</li>
+</ul>
+</li>
+</ul>
+<h1 id="6-其他问题"><a href="#6-其他问题" class="headerlink" title="6. 其他问题"></a>6. 其他问题</h1><ul>
+<li>转化率及点击率同时预估<ul>
+<li>阿里巴巴的Entire Space Multi-task Model，使用两个模型分别估计ctr和cvr，并且两个模型共享基础的Embedding结构且进行统一训练，避免单一使用转化数据带来的稀疏性问题</li>
+</ul>
+</li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢您的赞赏，我会继续努力的!^_^<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/weixin.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/12/17/强化学习中的A3C算法/" class="archive-article-date">
-  	<time datetime="2017-12-17T08:09:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/12/17/强化学习中的A3C算法/">强化学习中的A3C算法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">强化学习、TensorFlow</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">ctr预估、机器学习</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://andyxzq.github.io/2018/11/04/广告ctr预估问题总结/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/26/爬虫框架Scrapy学习笔记/" class="archive-article-date">
-  	<time datetime="2017-11-26T11:18:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-26</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/05/02/TensorFlow高级API-Dataset和Estimator的使用介绍/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">TensorFlow高级API-Dataset和Estimator的使用介绍</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/26/爬虫框架Scrapy学习笔记/">爬虫框架Scrapy学习笔记</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">爬虫，python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/26/广告ctr预估中的FM和FFM模型/" class="archive-article-date">
-  	<time datetime="2017-11-26T10:04:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/26/广告ctr预估中的FM和FFM模型/">广告ctr预估中的FM和FFM模型</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">机器学习、互联网广告</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/26/Reinforcement-Learning-学习笔记/" class="archive-article-date">
-  	<time datetime="2017-11-26T08:44:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/26/Reinforcement-Learning-学习笔记/">Reinforcement Learning-学习笔记</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">强化学习，算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -340,8 +447,8 @@
 	var yiliaConfig = {
 		mathjax: [object Object],
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
